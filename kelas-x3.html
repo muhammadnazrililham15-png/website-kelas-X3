@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelas X-3 | SMAN 1 Cilamaya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy:#0a1628; --blue:#1e4fc2; --sky:#4f9cf9;
+            --gold:#f5c842; --white:#ffffff; --gray:#8b95a8;
+            --green:#22c55e; --red:#ef4444;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:var(--navy);color:var(--white);font-family:'DM Sans',sans-serif;overflow-x:hidden;}
+        a{color:inherit;text-decoration:none;}
+
+        /* NAV */
+        nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,22,40,0.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.06);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
+        .nav-logo{font-family:'Playfair Display',serif;font-size:1.2rem;}
+        .nav-logo span{color:var(--sky);}
+        .nav-links{display:flex;gap:18px;flex-wrap:wrap;}
+        .nav-links a{color:var(--gray);font-size:0.8rem;font-weight:500;transition:color .2s;letter-spacing:.3px;}
+        .nav-links a:hover{color:var(--white);}
+
+        /* HERO */
+        .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 20px 60px;overflow:hidden;background:radial-gradient(ellipse at 20% 50%,#1a2f6e,var(--navy) 60%);}
+        .hero::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(79,156,249,.12),transparent 70%);top:-200px;right:-200px;pointer-events:none;}
+        .dots-bg{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;}
+        .badge{display:inline-block;background:rgba(245,200,66,.12);border:1px solid rgba(245,200,66,.4);color:var(--gold);font-size:.75rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:6px 18px;border-radius:100px;margin-bottom:24px;animation:fadeUp .6s ease both;}
+        .hero-title{font-family:'Playfair Display',serif;font-size:clamp(4rem,12vw,9rem);font-weight:900;line-height:1;letter-spacing:-3px;text-align:center;animation:fadeUp .7s ease .1s both;}
+        .hero-title span{color:var(--sky);}
+        .hero-school{font-size:.95rem;color:var(--sky);margin-top:12px;font-weight:500;letter-spacing:1px;animation:fadeUp .7s ease .15s both;}
+        .hero-subtitle{font-size:1rem;color:var(--gray);margin-top:8px;font-weight:300;letter-spacing:1px;animation:fadeUp .7s ease .2s both;}
+        .hero-divider{width:60px;height:3px;background:linear-gradient(90deg,var(--blue),var(--sky));margin:30px auto;border-radius:2px;animation:fadeUp .7s ease .3s both;}
+        .hero-stats{display:flex;gap:48px;animation:fadeUp .7s ease .4s both;}
+        .stat{text-align:center;}
+        .stat-number{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:700;}
+        .stat-label{font-size:.75rem;color:var(--gray);text-transform:uppercase;letter-spacing:2px;}
+        .scroll-hint{position:absolute;bottom:30px;color:var(--gray);font-size:.75rem;letter-spacing:2px;animation:bounce 2s infinite;}
+        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+        /* LIGHTBOX */
+        .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;align-items:center;justify-content:center;}
+        .lightbox.active{display:flex;}
+        .lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;}
+        .lightbox-close{position:absolute;top:20px;right:28px;font-size:2rem;color:white;cursor:pointer;}
+
+        /* COMMON */
+        .sec{padding:80px 20px;}
+        .sec-alt{background:#060e1f;}
+        .sec-mid{background:linear-gradient(180deg,var(--navy),#0d1f45);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);}
+        .si{max-width:1200px;margin:0 auto;}
+        .sl{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--sky);font-weight:600;margin-bottom:12px;}
+        .st{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;margin-bottom:40px;}
+
+        /* GALERI */
+        .galeri-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+        .gtab{padding:7px 18px;border-radius:100px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--gray);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .25s;}
+        .gtab:hover{border-color:var(--sky);color:var(--white);}
+        .gtab.active{background:var(--blue);border-color:var(--blue);color:var(--white);}
+        .galeri-panel{display:none;}
+        .galeri-panel.active{display:block;animation:fadeUp .3s ease;}
+        .galeri-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;}
+        .galeri-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+        @media(max-width:640px){.galeri-grid,.galeri-grid-3{grid-template-columns:1fr;}}
+        .galeri-main img{width:100%;height:380px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:transform .3s;}
+        .galeri-main img:hover{transform:scale(1.01);}
+        .galeri-side{display:flex;flex-direction:column;gap:14px;}
+        .galeri-side img{width:100%;height:183px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:transform .3s;}
+        .galeri-side img:hover{transform:scale(1.01);}
+        .galeri-grid-3 img{width:100%;height:220px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:transform .3s;}
+        .galeri-grid-3 img:hover{transform:scale(1.01);}
+
+        /* STRUKTUR */
+        .struktur-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+        .struktur-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;transition:all .3s;position:relative;overflow:hidden;}
+        .struktur-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--sky));opacity:0;transition:opacity .3s;}
+        .struktur-card:hover{background:rgba(79,156,249,.08);border-color:rgba(79,156,249,.3);transform:translateY(-4px);}
+        .struktur-card:hover::before,.struktur-card.highlight::before{opacity:1;}
+        .struktur-card.highlight{background:linear-gradient(135deg,rgba(30,79,194,.3),rgba(79,156,249,.15));border-color:rgba(79,156,249,.4);}
+        .jabatan{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--sky);font-weight:600;margin-bottom:8px;}
+        .nama{font-weight:600;font-size:.95rem;}
+
+        /* JADWAL PELAJARAN */
+        .hari-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+        .tab-btn{padding:8px 20px;border-radius:100px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--gray);font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .25s;}
+        .tab-btn:hover{border-color:var(--sky);color:var(--white);}
+        .tab-btn.active{background:var(--blue);border-color:var(--blue);color:var(--white);}
+        .jadpel-panel{display:none;animation:fadeUp .3s ease;}
+        .jadpel-panel.active{display:block;}
+        .jadpel-table{width:100%;border-collapse:collapse;}
+        .jadpel-table th{background:rgba(30,79,194,.3);color:var(--sky);font-size:.75rem;letter-spacing:2px;text-transform:uppercase;padding:12px 16px;text-align:left;border-bottom:1px solid rgba(79,156,249,.2);}
+        .jadpel-table td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);color:#c8d5f0;font-size:.9rem;vertical-align:middle;}
+        .jadpel-table tr:hover td{background:rgba(79,156,249,.05);}
+        .mapel-badge{display:inline-block;background:rgba(79,156,249,.12);color:var(--sky);padding:3px 10px;border-radius:6px;font-size:.8rem;font-weight:600;}
+        .mapel-badge.special{background:rgba(245,200,66,.12);color:var(--gold);}
+        .istirahat-row td{text-align:center;color:var(--gold);padding:8px;font-size:.78rem;letter-spacing:2px;font-style:italic;}
+
+        /* PIKET */
+        .piket-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+        .piket-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;transition:all .3s;}
+        .piket-card:hover{background:rgba(79,156,249,.08);border-color:rgba(79,156,249,.3);transform:translateY(-4px);}
+        .piket-hari{font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--sky);font-weight:600;margin-bottom:14px;}
+        .piket-nama{display:flex;flex-direction:column;gap:7px;}
+        .piket-nama span{font-size:.88rem;color:#c8d5f0;padding:6px 10px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid rgba(255,255,255,.05);}
+        .piket-nama span.new{border-color:rgba(245,200,66,.3);background:rgba(245,200,66,.06);color:var(--gold);}
+
+        /* KEJUARAAN */
+        .award-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+        .award-card{background:linear-gradient(135deg,rgba(245,200,66,.1),rgba(245,200,66,.04));border:1px solid rgba(245,200,66,.25);border-radius:16px;padding:24px;display:flex;gap:16px;align-items:flex-start;transition:all .3s;}
+        .award-card:hover{transform:translateY(-4px);border-color:rgba(245,200,66,.5);}
+        .award-icon{font-size:2.5rem;flex-shrink:0;}
+        .award-title{font-weight:700;font-size:1rem;color:var(--gold);margin-bottom:6px;}
+        .award-desc{font-size:.85rem;color:#c8d5f0;line-height:1.5;}
+        .award-badge{display:inline-block;background:rgba(245,200,66,.15);color:var(--gold);font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:100px;margin-top:8px;letter-spacing:1px;}
+
+        /* TUGAS */
+        .tugas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+        .tugas-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;transition:all .3s;}
+        .tugas-card:hover{background:rgba(79,156,249,.07);border-color:rgba(79,156,249,.3);}
+        .tugas-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+        .tugas-mapel{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--sky);font-weight:600;}
+        .tugas-deadline{font-size:.72rem;padding:3px 10px;border-radius:100px;}
+        .tugas-deadline.urgent{background:rgba(239,68,68,.15);color:#f87171;}
+        .tugas-deadline.ok{background:rgba(34,197,94,.15);color:#4ade80;}
+        .tugas-title{font-weight:700;font-size:.95rem;margin-bottom:8px;}
+        .tugas-desc{font-size:.82rem;color:var(--gray);line-height:1.5;margin-bottom:16px;}
+        .tugas-btn{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:var(--white);padding:8px 16px;border-radius:8px;font-size:.8rem;font-weight:600;transition:background .2s;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;}
+        .tugas-btn:hover{background:#2563eb;}
+        .tugas-empty{text-align:center;padding:40px;color:var(--gray);font-style:italic;}
+
+        /* FORUM */
+        .forum-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;margin-bottom:20px;}
+        .forum-input-area{display:flex;flex-direction:column;gap:12px;margin-bottom:30px;}
+        .forum-input-area input,.forum-input-area textarea{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .3s;resize:none;}
+        .forum-input-area input::placeholder,.forum-input-area textarea::placeholder{color:var(--gray);}
+        .forum-input-area input:focus,.forum-input-area textarea:focus{border-color:var(--sky);}
+        .forum-submit{align-self:flex-start;background:var(--blue);color:var(--white);border:none;padding:10px 22px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:background .2s;}
+        .forum-submit:hover{background:#2563eb;}
+        .comment-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;margin-bottom:12px;}
+        .comment-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+        .comment-author{font-weight:700;font-size:.88rem;color:var(--sky);}
+        .comment-time{font-size:.72rem;color:var(--gray);}
+        .comment-text{font-size:.88rem;color:#c8d5f0;line-height:1.5;}
+        .comment-reply-btn{background:none;border:none;color:var(--gray);font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;padding:4px 0;transition:color .2s;}
+        .comment-reply-btn:hover{color:var(--sky);}
+        .replies{margin-top:12px;margin-left:20px;border-left:2px solid rgba(79,156,249,.2);padding-left:14px;}
+        .reply-input-area{display:flex;gap:8px;margin-top:10px;display:none;}
+        .reply-input-area input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.84rem;outline:none;}
+        .reply-input-area input:focus{border-color:var(--sky);}
+        .reply-name-input{width:130px!important;flex:none!important;}
+        .reply-submit{background:var(--blue);color:var(--white);border:none;padding:8px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap;}
+        .reply-submit:hover{background:#2563eb;}
+
+        /* DAFTAR SISWA */
+        .search-bar{position:relative;margin-bottom:30px;}
+        .search-bar input{width:100%;max-width:400px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 20px 12px 48px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;transition:border-color .3s;}
+        .search-bar input::placeholder{color:var(--gray);}
+        .search-bar input:focus{border-color:var(--sky);background:rgba(79,156,249,.06);}
+        .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--gray);}
+        .count-badge{display:inline-block;background:rgba(79,156,249,.15);color:var(--sky);font-size:.8rem;font-weight:600;padding:3px 12px;border-radius:100px;margin-left:12px;vertical-align:middle;}
+        .siswa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+        .siswa-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px 12px;text-align:center;font-size:.78rem;font-weight:500;color:#c8d5f0;transition:all .25s;}
+        .siswa-card .nomor{display:block;font-size:.6rem;color:var(--gray);margin-bottom:6px;}
+        .siswa-card:hover{background:rgba(79,156,249,.1);border-color:rgba(79,156,249,.35);color:var(--white);transform:translateY(-3px);}
+        .siswa-card.pengurus{border-color:rgba(245,200,66,.25);background:rgba(245,200,66,.04);}
+        .hidden{display:none!important;}
+
+        /* KONTAK */
+        .kontak-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+        .kontak-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;display:flex;align-items:center;gap:16px;transition:all .3s;text-decoration:none;}
+        .kontak-card:hover{background:rgba(79,156,249,.08);border-color:rgba(79,156,249,.3);transform:translateY(-4px);}
+        .kontak-icon{font-size:2rem;flex-shrink:0;}
+        .kontak-label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--sky);font-weight:600;margin-bottom:4px;}
+        .kontak-val{font-weight:600;font-size:.95rem;}
+
+        /* FOOTER */
+        footer{text-align:center;padding:40px 20px;border-top:1px solid rgba(255,255,255,.06);color:var(--gray);font-size:.85rem;}
+        footer span{color:var(--sky);}
+
+        @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+        .reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease;}
+        .reveal.visible{opacity:1;transform:translateY(0);}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--navy)}::-webkit-scrollbar-thumb{background:rgba(79,156,249,.4);border-radius:3px}
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-logo">Kelas <span>X-3</span></div>
+    <div class="nav-links">
+        <a href="#galeri">Foto</a>
+        <a href="#struktur">Struktur</a>
+        <a href="#kejuaraan">Prestasi</a>
+        <a href="#jadpel">Jadwal</a>
+        <a href="#piket">Piket</a>
+        <a href="#tugas">Tugas</a>
+        <a href="#forum">Forum</a>
+        <a href="#siswa">Siswa</a>
+        <a href="#kontak">Kontak</a>
+    </div>
+</nav>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">✕</span>
+    <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="dots-bg"></div>
+    <div class="badge">Tahun Ajaran 2025 / 2026</div>
+    <h1 class="hero-title">Kelas <span>X-3</span></h1>
+    <p class="hero-school">SMAN 1 Cilamaya · Karawang</p>
+    <p class="hero-subtitle">Semangat, Solid, Sukses Bersama</p>
+    <div class="hero-divider"></div>
+    <div class="hero-stats">
+        <div class="stat"><div class="stat-number">41</div><div class="stat-label">Siswa</div></div>
+        <div class="stat"><div class="stat-number">9</div><div class="stat-label">Pengurus</div></div>
+        <div class="stat"><div class="stat-number">2</div><div class="stat-label">Prestasi</div></div>
+    </div>
+    <div class="scroll-hint">↓ &nbsp; scroll</div>
+</section>
+
+<!-- GALERI -->
+<section class="sec sec-alt" id="galeri">
+    <div class="si">
+        <p class="sl reveal">Kenangan</p>
+        <h2 class="st reveal">Galeri Kelas 📸</h2>
+        <div class="galeri-tabs reveal">
+            <button class="gtab active" onclick="showGaleri('olahraga',this)">Pakaian Olahraga</button>
+            <button class="gtab" onclick="showGaleri('hut',this)">HUT Sacila &amp; Prestasi</button>
+            <button class="gtab" onclick="showGaleri('seragam',this)">Foto Seragam</button>
+        </div>
+
+        <!-- Pakaian Olahraga -->
+        <div class="galeri-panel active" id="galeri-olahraga">
+            <div class="galeri-grid">
+                <div class="galeri-main"><img src="/mnt/user-data/uploads/1000532280.jpg" alt="Kelas X-3" onclick="openLightbox(this.src)"></div>
+                <div class="galeri-side">
+                    <img src="/mnt/user-data/uploads/1000532277.jpg" alt="Kelas X-3" onclick="openLightbox(this.src)">
+                    <img src="/mnt/user-data/uploads/1000532276.jpg" alt="Kelas X-3" onclick="openLightbox(this.src)">
+                </div>
+            </div>
+            <div style="margin-top:14px;">
+                <img src="/mnt/user-data/uploads/1000532272.jpg" alt="Kelas X-3" style="width:100%;height:300px;object-fit:cover;border-radius:14px;cursor:pointer;" onclick="openLightbox(this.src)">
+            </div>
+        </div>
+
+        <!-- HUT Sacila -->
+        <div class="galeri-panel" id="galeri-hut">
+            <div class="galeri-grid">
+                <div class="galeri-main"><img src="/mnt/user-data/uploads/1000532141.jpg" alt="HUT Sacila" onclick="openLightbox(this.src)"></div>
+                <div class="galeri-side">
+                    <img src="/mnt/user-data/uploads/1000532144.jpg" alt="HUT Sacila" onclick="openLightbox(this.src)">
+                    <img src="/mnt/user-data/uploads/1000532191.jpg" alt="HUT Sacila" onclick="openLightbox(this.src)">
+                </div>
+            </div>
+            <div class="galeri-grid-3" style="margin-top:14px;">
+                <img src="/mnt/user-data/uploads/1000532194.jpg" alt="Prestasi" onclick="openLightbox(this.src)">
+                <img src="/mnt/user-data/uploads/1000531790.jpg" alt="Prestasi" onclick="openLightbox(this.src)">
+                <img src="/mnt/user-data/uploads/1000531789.jpg" alt="Prestasi" onclick="openLightbox(this.src)">
+            </div>
+            <div class="galeri-grid-3" style="margin-top:14px;">
+                <img src="/mnt/user-data/uploads/1000532197.jpg" alt="Prestasi" onclick="openLightbox(this.src)">
+                <img src="/mnt/user-data/uploads/1000531788.jpg" alt="Prestasi" onclick="openLightbox(this.src)">
+            </div>
+        </div>
+
+        <!-- Seragam -->
+        <div class="galeri-panel" id="galeri-seragam">
+            <div class="galeri-grid">
+                <div class="galeri-main"><img src="/mnt/user-data/uploads/1000716697.jpg" alt="Foto Kelas" onclick="openLightbox(this.src)"></div>
+                <div class="galeri-side">
+                    <img src="/mnt/user-data/uploads/1000716696.jpg" alt="Foto Kelas" onclick="openLightbox(this.src)">
+                    <img src="/mnt/user-data/uploads/1000716678.jpg" alt="Foto Kelas" onclick="openLightbox(this.src)">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STRUKTUR -->
+<section class="sec sec-mid" id="struktur">
+    <div class="si">
+        <p class="sl reveal">Organisasi</p>
+        <h2 class="st reveal">Struktur Kelas 🏛️</h2>
+        <div class="struktur-grid reveal">
+            <div class="struktur-card highlight"><div class="jabatan">Wali Kelas</div><div class="nama">Pak Leman Budiyanto</div></div>
+            <div class="struktur-card highlight"><div class="jabatan">Ketua Kelas</div><div class="nama">Muhammad Nazril Ilham</div></div>
+            <div class="struktur-card"><div class="jabatan">Wakil Ketua</div><div class="nama">Jihan Nabila</div></div>
+            <div class="struktur-card"><div class="jabatan">Sekretaris 1</div><div class="nama">Haykal Annurrobi Aziz</div></div>
+            <div class="struktur-card"><div class="jabatan">Sekretaris 2</div><div class="nama">Aghata Alya Mukhbita</div></div>
+            <div class="struktur-card"><div class="jabatan">Bendahara 1</div><div class="nama">Nok Syafa Nur</div></div>
+            <div class="struktur-card"><div class="jabatan">Bendahara 2</div><div class="nama">Mutiara Fadilah</div></div>
+            <div class="struktur-card"><div class="jabatan">Seksi Pelajaran 1</div><div class="nama">Dhea Apriliani</div></div>
+            <div class="struktur-card"><div class="jabatan">Seksi Pelajaran 2</div><div class="nama">Azka Novalita</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- KEJUARAAN -->
+<section class="sec sec-alt" id="kejuaraan">
+    <div class="si">
+        <p class="sl reveal">Prestasi</p>
+        <h2 class="st reveal">Kejuaraan Kelas X-3 🏆</h2>
+        <div class="award-grid reveal">
+            <div class="award-card">
+                <div class="award-icon">🥉</div>
+                <div>
+                    <div class="award-title">Juara 3 – Festival HUT Sacila</div>
+                    <div class="award-desc">Kelas X-3 berhasil meraih Juara 3 dalam Festival HUT Sacila yang diselenggarakan di SMAN 1 Cilamaya.</div>
+                    <div class="award-badge">SMAN 1 Cilamaya</div>
+                </div>
+            </div>
+            <div class="award-card">
+                <div class="award-icon">🎉</div>
+                <div>
+                    <div class="award-title">Yel-Yel Terbaik – 17 Agustus</div>
+                    <div class="award-desc">Kelas X-3 bersama gabungan 3 kelas tampil memukau dan meraih prestasi di lomba Yel-Yel 17 Agustus.</div>
+                    <div class="award-badge">Lomba Agustusan</div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top:30px;">
+            <p class="sl reveal" style="margin-bottom:16px;">Dokumentasi Yel-Yel 17 Agustus</p>
+            <div class="galeri-grid-3 reveal">
+                <img src="/mnt/user-data/uploads/1000532194.jpg" alt="Yel-Yel" onclick="openLightbox(this.src)" style="width:100%;height:220px;object-fit:cover;border-radius:14px;cursor:pointer;border:1px solid rgba(255,255,255,.08);">
+                <img src="/mnt/user-data/uploads/1000531790.jpg" alt="Yel-Yel" onclick="openLightbox(this.src)" style="width:100%;height:220px;object-fit:cover;border-radius:14px;cursor:pointer;border:1px solid rgba(255,255,255,.08);">
+                <img src="/mnt/user-data/uploads/1000531789.jpg" alt="Yel-Yel" onclick="openLightbox(this.src)" style="width:100%;height:220px;object-fit:cover;border-radius:14px;cursor:pointer;border:1px solid rgba(255,255,255,.08);">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- JADWAL PELAJARAN -->
+<section class="sec sec-mid" id="jadpel">
+    <div class="si">
+        <p class="sl reveal">Akademik</p>
+        <h2 class="st reveal">Jadwal Pelajaran 📚</h2>
+        <div class="hari-tabs reveal">
+            <button class="tab-btn active" onclick="showHari('senin',this)">Senin</button>
+            <button class="tab-btn" onclick="showHari('selasa',this)">Selasa</button>
+            <button class="tab-btn" onclick="showHari('rabu',this)">Rabu</button>
+            <button class="tab-btn" onclick="showHari('kamis',this)">Kamis</button>
+            <button class="tab-btn" onclick="showHari('jumat',this)">Jumat</button>
+        </div>
+        <div class="jadpel-panel active reveal" id="panel-senin">
+            <table class="jadpel-table"><thead><tr><th>Jam</th><th>Waktu</th><th>Mata Pelajaran</th><th>Guru</th></tr></thead><tbody>
+                <tr><td>–</td><td>06:30–07:00</td><td><span class="mapel-badge special">Makan Bergizi Gratis</span></td><td>–</td></tr>
+                <tr><td>–</td><td>07:00–07:30</td><td><span class="mapel-badge special">Upacara / Apel</span></td><td>–</td></tr>
+                <tr><td>–</td><td>07:30–08:00</td><td><span class="mapel-badge special">Literasi</span></td><td>–</td></tr>
+                <tr><td>3</td><td>08:00–09:00</td><td>Matematika</td><td>Leman Budiyanto, S.Pd</td></tr>
+                <tr><td>4</td><td>09:00–10:00</td><td>Matematika</td><td>Leman Budiyanto, S.Pd</td></tr>
+                <tr class="istirahat-row"><td colspan="4">— ISTIRAHAT —</td></tr>
+                <tr><td>5</td><td>10:00–11:00</td><td>Biologi</td><td>Yeni Yanti, S.Pd</td></tr>
+                <tr><td>6</td><td>11:00–12:00</td><td>Biologi</td><td>Yeni Yanti, S.Pd</td></tr>
+                <tr><td>7</td><td>12:00–13:00</td><td>Biologi</td><td>Yeni Yanti, S.Pd</td></tr>
+                <tr class="istirahat-row"><td colspan="4">— ISTIRAHAT —</td></tr>
+                <tr><td>8</td><td>13:00–14:00</td><td>B. Inggris</td><td>Desi Suryani, S.Pd</td></tr>
+                <tr><td>9</td><td>14:00–15:00</td><td>B. Inggris</td><td>Desi Suryani, S.Pd</td></tr>
+                <tr><td>10</td><td>15:00–16:00</td><td>B. Inggris</td><td>Desi Suryani, S.Pd</td></tr>
+            </tbody></table>
+        </div>
+        <div class="jadpel-panel" id="panel-selasa">
+            <table class="jadpel-table"><thead><tr><th>Jam</th><th>Waktu</th><th>Mata Pelajaran</th><th>Guru</th></tr></thead><tbody>
+                <tr><td>–</td><td>06:30–07:00</td><td><span class="mapel-badge special">Makan Bergizi Gratis</span></td><td>–</td></tr>
+                <tr><td>1</td><td>07:00–08:00</td><td>Matematika</td><td>Cuce Cahyati, S.Pd</td></tr>
+                <tr><td>2</td><td>08:00–09:00</td><td>Matematika</td><td>Cuce Cahyati, S.Pd</td></tr>
+                <tr><td>3</td><td>09:00–10:00</td><td>Bahasa Indonesia</td><td>Mardiah, S.Pd</td></tr>
+                <tr><td>4</td><td>10:00–11:00</td><td>Bahasa Indonesia</td><td>Mardiah, S.Pd</td></tr>
+                <tr class="istirahat-row"><td colspan="4">— ISTIRAHAT —</td></tr>
+                <tr><td>5</td><td>11:00–12:00</td><td>Sosiologi</td><td>Mardiah, S.Pd</td></tr>
+                <tr><td>6</td><td>12:00–13:00</td><td>PABP</td><td>Drs. Ujang Nandar</td></tr>
+                <tr class="istirahat-row"><td colspan="4">— ISTIRAHAT —</td></tr>
+                <tr><td>7</td><td>13:00–14:00</td><td>PABP</td><td>Drs. Ujang Nandar</td></tr>
+                <tr><td>8</td><td>14:00–15:00</td><td>B. Indonesia</td><td>Drs. Ujang Nandar</td></tr>
+                <tr><td>9</td><td>15:00–16:00</td><td>B. Indonesia</td><td>Drs. Ujang Nandar</td></tr>
+            </tbody></table>
+        </div>
+        <div class="jadpel-panel" id="panel-rabu">
+            <table class="jadpel-table"><thead><tr><th>Jam</th><th>Waktu</th><th>Mata Pelajaran</th><th>Guru</th></tr></thead><tbody>
+                <tr><td>–</td><td>06:30–07:00</td><td><span class="mapel-badge special">Makan Bergizi Gratis</span></td><td>–</td></tr>
+                <tr><td>1</td><td>07:00–08:00</td><td>Bahasa Sunda</td><td>Cuce Cahyati, S.Pd</td></tr>
+                <tr><td>2</td><td>08:00–09:00</td><td>Bahasa Sunda</td><td>Cuce Cahyati, S.Pd</td></tr>
+                <tr><td>3</td><td>09:00–10:00</td><td>Bahasa Sunda</td><td>Cuce Cahyati, S.Pd</td></tr>
+                <tr><td>4</td><td>10:00–11:00</td><td>PPKn</td><td>Nita Rahmat Ahmad, S.Km</td></tr>
+                <tr class="istirahat-row"><td colspan="4">— ISTIRAHAT —</td></tr>
+                <tr><td>5</td><td>11:00–12:00</td><td>PPKn</td><td>Nita Rahmat Ahmad, S.Km</td></tr>
+                <tr><td>6</td><td>12:00–13:00</td><td>Ekonomi</td><td>Devi Lestari Ramdhi, S.Si</td></tr>
+                <tr class="istirahat-row"><td colspan="4">— ISTIRAHAT —</td></tr>
+                <tr><td>7</td><td>13:00–14:00</td><td>Ekonomi</td><td>Devi Lestari Ramdhi, S.Si</td></tr>
+                <tr><td>8</td><td>14:00–15:00</td><td>B. Indonesia</td><td>Devi Wahyu Ningsih, S.Pd</td></tr>
+                <tr><td>9</td><td>15:00–16:00</td><td>B. Indonesia</td><td>Devi Wahyu Ningsih, S.Pd</td></tr>
+            </tbody></table>
+        </div>
+        <div class="jadpel-panel" id="panel-kamis">
+            <table class="jadpel-table"><thead><tr><th>Jam</th><th>Waktu</th><th>Mata Pelajaran</th><th>Guru</th></tr></thead><tbody>
+                <tr><td>–</td><td>06:30–07:00</td><td><span class="mapel-badge special">Makan Bergizi Gratis</span></td><td>–</td></tr>
+                <tr><td>1</td><td>07:00–08:00</td><td>Geografi</td><td>Muhamad Amron, S.Pd</td></tr>
+                <tr><td>2</td><td>08:00–09:00</td><td>Geografi</td><td>Muhamad Amron, S.Pd</td></tr>
+                <tr><td>3</td><td>09:00–10:00</td><td>Informatika</td><td>Atim, S.Pd</td></tr>
+                <tr><td>4</td><td>10:00–11:00</td><td>Informatika</td><td>Atim, S.Pd</td></tr>
+                <tr class="istirahat-row"><td colspan="4">— ISTIRAHAT —</td></tr>
+                <tr><td>5</td><td>11:00–12:00</td><td>Informatika</td><td>Atim, S.Pd</td></tr>
+                <tr><td>6</td><td>12:00–13:00</td><td>Ekonomi</td><td>Tanti Yuliawati, S.Kom</td></tr>
+                <tr class="istirahat-row"><td colspan="4">— ISTIRAHAT —</td></tr>
+                <tr><td>7</td><td>13:00–14:00</td><td>Sejarah</td><td>Hina Agustria Nabilah, S.Pd</td></tr>
+                <tr><td>8</td><td>14:00–15:00</td><td>PKWU</td><td>Budan Bowo, S.Pd</td></tr>
+                <tr><td>9</td><td>15:00–16:00</td><td>PKWU</td><td>Yandi Fajrian, S.Pd</td></tr>
+            </tbody></table>
+        </div>
+        <div class="jadpel-panel" id="panel-jumat">
+            <table class="jadpel-table"><thead><tr><th>Jam</th><th>Waktu</th><th>Mata Pelajaran</th><th>Guru</th></tr></thead><tbody>
+                <tr><td>–</td><td>07:30–08:00</td><td><span class="mapel-badge special">Penguatan Karakter</span></td><td>–</td></tr>
+                <tr><td>1</td><td>08:00–09:00</td><td>B. Indonesia</td><td>Indu Rosmana, S.Pd</td></tr>
+                <tr><td>2</td><td>09:00–10:00</td><td>B. Indonesia</td><td>Indu Rosmana, S.Pd</td></tr>
+                <tr class="istirahat-row"><td colspan="4">— ISTIRAHAT —</td></tr>
+                <tr><td>3</td><td>10:00–11:00</td><td>PJOK</td><td>Budan Bowo, S.Pd</td></tr>
+                <tr><td>4</td><td>11:00–12:00</td><td>PJOK</td><td>Budan Bowo, S.Pd</td></tr>
+                <tr class="istirahat-row"><td colspan="4">— ISTIRAHAT —</td></tr>
+                <tr><td>5</td><td>13:00–14:00</td><td>PKWU</td><td>Yandi Fajrian, S.Pd</td></tr>
+                <tr><td>6</td><td>14:00–15:00</td><td>PKWU</td><td>Yandi Fajrian, S.Pd</td></tr>
+            </tbody></table>
+        </div>
+    </div>
+</section>
+
+<!-- JADWAL PIKET -->
+<section class="sec sec-alt" id="piket">
+    <div class="si">
+        <p class="sl reveal">Kebersihan</p>
+        <h2 class="st reveal">Jadwal Piket 🧹</h2>
+        <p class="reveal" style="color:var(--gray);margin-bottom:32px;font-size:.85rem;font-style:italic;">"الطهور شطر الإيمان" — Kesucian/bersuci merupakan setengah dari Iman (HR. Muslim: 328)</p>
+        <div class="piket-grid reveal">
+            <div class="piket-card"><div class="piket-hari">Senin</div><div class="piket-nama"><span>Arum</span><span>Azka</span><span>Nazril</span><span>Abid</span><span>Siti Ayu</span><span>Naisya</span><span>Rizky</span><span>Nugraha</span></div></div>
+            <div class="piket-card"><div class="piket-hari">Selasa</div><div class="piket-nama"><span>Kevin</span><span>Rezky</span><span>Fajar</span><span>Cahyati</span><span>Nuraeni</span><span>Inayah</span><span>Faiz</span><span>Jihan</span></div></div>
+            <div class="piket-card"><div class="piket-hari">Rabu</div><div class="piket-nama"><span>Rendra</span><span>Bita</span><span>Aghata</span><span>Chiara</span><span>Haykal</span><span>Fitria</span><span>Valen</span><span>Raditia</span></div></div>
+            <div class="piket-card"><div class="piket-hari">Kamis</div><div class="piket-nama"><span>Risma</span><span>Silvi</span><span>Afgan</span><span>Haiza</span><span>Syafa</span><span>Lulu</span><span>Alfian</span><span>Raisya</span></div></div>
+            <div class="piket-card"><div class="piket-hari">Jum'at</div><div class="piket-nama"><span>Dhea</span><span>Husna</span><span>Mutiara</span><span>Shandika</span><span>Desti</span><span>Wulan</span><span>Yudha</span><span class="new">Nurmala Sari ✨</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- TUGAS & KAS -->
+<section class="sec sec-mid" id="tugas">
+    <div class="si">
+        <p class="sl reveal">Akademik & Keuangan</p>
+        <h2 class="st reveal">Tugas & Kas Kelas 📂</h2>
+
+        <!-- Kumpul Tugas Drive -->
+        <div class="reveal" style="margin-bottom:48px;">
+            <p style="color:var(--gray);margin-bottom:20px;font-size:.9rem;">Kumpulkan semua tugas langsung ke Google Drive kelas. Pastikan nama file sesuai format yang diminta gurumu.</p>
+            <a href="https://drive.google.com/drive/folders/15O2UnWkZ8aJE2xY290tOYv5QHYyx7tkr" target="_blank"
+               style="display:inline-flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(30,79,194,.4),rgba(79,156,249,.2));border:1px solid rgba(79,156,249,.4);border-radius:16px;padding:22px 28px;transition:all .3s;text-decoration:none;max-width:480px;width:100%;">
+                <span style="font-size:2.4rem;">📁</span>
+                <div>
+                    <div style="font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--sky);font-weight:600;margin-bottom:5px;">Google Drive Kelas</div>
+                    <div style="font-weight:700;font-size:1.05rem;">Kumpulkan Tugas di Drive</div>
+                    <div style="font-size:.78rem;color:var(--gray);margin-top:3px;">Klik untuk membuka folder pengumpulan →</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Laporan Kas -->
+        <p class="sl reveal" style="margin-bottom:12px;">Keuangan</p>
+        <h3 class="reveal" style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:16px;">Laporan Keuangan Kas Kelas 💰</h3>
+        <p class="reveal" style="color:var(--gray);margin-bottom:20px;font-size:.9rem;">Laporan transparan keuangan kas kelas X-3. Dapat diakses oleh seluruh anggota kelas.</p>
+        <a href="https://docs.google.com/spreadsheets/d/1qNQKeuWaA-1EM0LeFW99qdzBwXSNvkxG/edit?usp=drivesdk&ouid=112055119630679010918&rtpof=true&sd=true" target="_blank"
+           class="reveal"
+           style="display:inline-flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(34,197,94,.15),rgba(34,197,94,.05));border:1px solid rgba(34,197,94,.3);border-radius:16px;padding:22px 28px;transition:all .3s;text-decoration:none;max-width:480px;width:100%;">
+            <span style="font-size:2.4rem;">📊</span>
+            <div>
+                <div style="font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:#4ade80;font-weight:600;margin-bottom:5px;">Google Spreadsheet</div>
+                <div style="font-weight:700;font-size:1.05rem;">Laporan Transparan Kas Kelas</div>
+                <div style="font-size:.78rem;color:var(--gray);margin-top:3px;">Klik untuk melihat laporan keuangan →</div>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- FORUM -->
+<section class="sec sec-alt" id="forum">
+    <div class="si">
+        <p class="sl reveal">Diskusi</p>
+        <h2 class="st reveal">Forum Tanya Jawab 💬</h2>
+        <div class="forum-box reveal">
+            <div class="forum-input-area">
+                <input type="text" id="commentName" placeholder="Nama kamu...">
+                <textarea id="commentText" rows="3" placeholder="Tulis pertanyaan atau diskusi..."></textarea>
+                <button class="forum-submit" onclick="addComment()">Kirim Komentar</button>
+            </div>
+            <div id="commentsList"></div>
+            <p id="noComments" style="text-align:center;color:var(--gray);font-style:italic;padding:20px;">Belum ada komentar. Jadilah yang pertama!</p>
+        </div>
+    </div>
+</section>
+
+<!-- DAFTAR SISWA -->
+<section class="sec sec-mid" id="siswa">
+    <div class="si">
+        <p class="sl reveal">Anggota</p>
+        <h2 class="st reveal">Daftar Siswa <span class="count-badge" id="count">41</span></h2>
+        <div class="search-bar reveal"><span class="search-icon">🔍</span><input type="text" id="searchInput" placeholder="Cari nama siswa..." oninput="filterSiswa()"></div>
+        <div class="siswa-grid reveal" id="siswaGrid">
+            <div class="siswa-card" data-name="ABID MAULANA ISMAIL"><span class="nomor">01</span>ABID MAULANA ISMAIL</div>
+            <div class="siswa-card pengurus" data-name="AGHATA ALYA MUKHBITA"><span class="nomor">02 ★</span>AGHATA ALYA MUKHBITA</div>
+            <div class="siswa-card" data-name="ALFIAN PUTRA WIJAYA"><span class="nomor">03</span>ALFIAN PUTRA WIJAYA</div>
+            <div class="siswa-card" data-name="ARUM AULIA SAFA"><span class="nomor">04</span>ARUM AULIA SAFA</div>
+            <div class="siswa-card pengurus" data-name="AZKA NOVALITA"><span class="nomor">05 ★</span>AZKA NOVALITA</div>
+            <div class="siswa-card" data-name="BITA MUDZALIFAH"><span class="nomor">06</span>BITA MUDZALIFAH</div>
+            <div class="siswa-card" data-name="CAHYATI"><span class="nomor">07</span>CAHYATI</div>
+            <div class="siswa-card" data-name="CHIARA ATHIR DIBA"><span class="nomor">08</span>CHIARA ATHIR DIBA</div>
+            <div class="siswa-card" data-name="DESTI AULIAS"><span class="nomor">09</span>DESTI AULIAS</div>
+            <div class="siswa-card pengurus" data-name="DHEA APRILIANI"><span class="nomor">10 ★</span>DHEA APRILIANI</div>
+            <div class="siswa-card" data-name="FAJAR RIZKY FADHILAH"><span class="nomor">11</span>FAJAR RIZKY FADHILAH</div>
+            <div class="siswa-card" data-name="FITRIA AZZAHRA ARIFAH"><span class="nomor">12</span>FITRIA AZZAHRA ARIFAH</div>
+            <div class="siswa-card" data-name="HAIZA IMTIYAZA"><span class="nomor">13</span>HAIZA IMTIYAZA</div>
+            <div class="siswa-card pengurus" data-name="HAYKAL ANNURROBBI AZIZ"><span class="nomor">14 ★</span>HAYKAL ANNURROBBI AZIZ</div>
+            <div class="siswa-card" data-name="INAYAH ALFU KAROMAH"><span class="nomor">15</span>INAYAH ALFU KAROMAH</div>
+            <div class="siswa-card pengurus" data-name="JIHAN NABILA"><span class="nomor">16 ★</span>JIHAN NABILA</div>
+            <div class="siswa-card" data-name="KEVIN ESA MAULANA"><span class="nomor">17</span>KEVIN ESA MAULANA</div>
+            <div class="siswa-card" data-name="LULU NUR FITRIANI"><span class="nomor">18</span>LULU NUR FITRIANI</div>
+            <div class="siswa-card" data-name="MUHAMAD FAIZ"><span class="nomor">19</span>MUHAMAD FAIZ</div>
+            <div class="siswa-card" data-name="MUHAMMAD AFGAN ALFARIZI"><span class="nomor">20</span>MUHAMMAD AFGAN ALFARIZI</div>
+            <div class="siswa-card pengurus" data-name="MUHAMMAD NAZRIL ILHAM"><span class="nomor">21 ★</span>MUHAMMAD NAZRIL ILHAM</div>
+            <div class="siswa-card pengurus" data-name="MUTIARA FADILAH"><span class="nomor">22 ★</span>MUTIARA FADILAH</div>
+            <div class="siswa-card" data-name="NAISYA ILMIRA"><span class="nomor">23</span>NAISYA ILMIRA</div>
+            <div class="siswa-card pengurus" data-name="NOK SYAFA NUR"><span class="nomor">24 ★</span>NOK SYAFA NUR</div>
+            <div class="siswa-card" data-name="NUGRAHA AWAL RAMADHAN"><span class="nomor">25</span>NUGRAHA AWAL RAMADHAN</div>
+            <div class="siswa-card" data-name="NURAENI"><span class="nomor">26</span>NURAENI</div>
+            <div class="siswa-card" data-name="NURMALA SARI"><span class="nomor">27</span>NURMALA SARI</div>
+            <div class="siswa-card" data-name="RADITIA PAJRIAN APRILIO"><span class="nomor">28</span>RADITIA PAJRIAN APRILIO</div>
+            <div class="siswa-card" data-name="RAYSA AULIA NURULAINI"><span class="nomor">29</span>RAYSA AULIA NURULAINI</div>
+            <div class="siswa-card" data-name="RENDRA DWI PRASETYA"><span class="nomor">30</span>RENDRA DWI PRASETYA</div>
+            <div class="siswa-card" data-name="REZKY ADITIA RAMADHAN"><span class="nomor">31</span>REZKY ADITIA RAMADHAN</div>
+            <div class="siswa-card" data-name="RISMA MUSTIKA AYU"><span class="nomor">32</span>RISMA MUSTIKA AYU</div>
+            <div class="siswa-card" data-name="RIZKI FEBRIYAN"><span class="nomor">33</span>RIZKI FEBRIYAN</div>
+            <div class="siswa-card" data-name="SHANDIKA KUMALA EKA POETRA"><span class="nomor">34</span>SHANDIKA KUMALA EKA POETRA</div>
+            <div class="siswa-card" data-name="SILVI YANI"><span class="nomor">35</span>SILVI YANI</div>
+            <div class="siswa-card" data-name="SITI AYU WULANDARI"><span class="nomor">36</span>SITI AYU WULANDARI</div>
+            <div class="siswa-card" data-name="TASYA NILAM CAHYA"><span class="nomor">37</span>TASYA NILAM CAHYA</div>
+            <div class="siswa-card" data-name="TAZKYA AYATUL HUSNA"><span class="nomor">38</span>TAZKYA AYATUL HUSNA</div>
+            <div class="siswa-card" data-name="VALEN MELVIANA PUTRI"><span class="nomor">39</span>VALEN MELVIANA PUTRI</div>
+            <div class="siswa-card" data-name="WULAN"><span class="nomor">40</span>WULAN</div>
+            <div class="siswa-card" data-name="YUDHA RAMADHAN"><span class="nomor">41</span>YUDHA RAMADHAN</div>
+        </div>
+        <p id="noResult" style="display:none;color:var(--gray);margin-top:20px;font-style:italic;">Tidak ada siswa dengan nama tersebut.</p>
+    </div>
+</section>
+
+<!-- KONTAK -->
+<section class="sec sec-alt" id="kontak">
+    <div class="si">
+        <p class="sl reveal">Hubungi Kami</p>
+        <h2 class="st reveal">Kontak & Sosial Media 📱</h2>
+        <div class="kontak-grid reveal">
+            <a class="kontak-card" href="https://wa.me/6283842717736" target="_blank">
+                <div class="kontak-icon">📞</div>
+                <div><div class="kontak-label">WhatsApp Ketua Kelas</div><div class="kontak-val">+62 838-4271-7736</div><div style="font-size:.78rem;color:var(--gray);margin-top:4px;">Muhammad Nazril Ilham</div></div>
+            </a>
+            <a class="kontak-card" href="https://www.instagram.com/trinityofsacila?igsh=MTJoaHN4M2x2NzQ4ag==" target="_blank">
+                <div class="kontak-icon">📸</div>
+                <div><div class="kontak-label">Instagram</div><div class="kontak-val">@trinityofsacila</div><div style="font-size:.78rem;color:var(--gray);margin-top:4px;">Follow akun Instagram kelas</div></div>
+            </a>
+            <a class="kontak-card" href="https://chat.whatsapp.com/H6C4HJMsnNcEOQpRkshQ0v?mode=hq2tcla" target="_blank">
+                <div class="kontak-icon">💬</div>
+                <div><div class="kontak-label">Grup WhatsApp Kelas</div><div class="kontak-val">Bergabung Sekarang</div><div style="font-size:.78rem;color:var(--gray);margin-top:4px;">Klik untuk join grup kelas X-3</div></div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2025 <span>Kelas X-3</span> · SMAN 1 Cilamaya · Karawang</p>
+    <p style="margin-top:8px;font-size:.75rem;opacity:.5;">★ = Pengurus Kelas &nbsp;|&nbsp; Made with ❤️ by X-3</p>
+</footer>
+
+<script>
+    // Reveal on scroll
+    const reveals=document.querySelectorAll('.reveal');
+    const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});},{threshold:.1});
+    reveals.forEach(el=>obs.observe(el));
+
+    // Galeri tabs
+    function showGaleri(id,btn){
+        document.querySelectorAll('.galeri-panel').forEach(p=>p.classList.remove('active'));
+        document.querySelectorAll('.gtab').forEach(b=>b.classList.remove('active'));
+        document.getElementById('galeri-'+id).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // Jadwal tabs
+    function showHari(hari,btn){
+        document.querySelectorAll('.jadpel-panel').forEach(p=>p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        document.getElementById('panel-'+hari).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // Search siswa
+    function filterSiswa(){
+        const q=document.getElementById('searchInput').value.toLowerCase().trim();
+        const cards=document.querySelectorAll('.siswa-card');
+        let vis=0;
+        cards.forEach(c=>{const m=c.getAttribute('data-name').toLowerCase().includes(q);c.classList.toggle('hidden',!m);if(m)vis++;});
+        document.getElementById('count').textContent=vis;
+        document.getElementById('noResult').style.display=vis===0?'block':'none';
+    }
+
+    // Lightbox
+    function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('active');}
+    function closeLightbox(){document.getElementById('lightbox').classList.remove('active');}
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+
+    // FORUM / KOMENTAR
+    let comments=[];
+
+    function timeAgo(date){
+        const s=Math.floor((Date.now()-date)/1000);
+        if(s<60)return 'baru saja';
+        if(s<3600)return Math.floor(s/60)+' menit lalu';
+        if(s<86400)return Math.floor(s/3600)+' jam lalu';
+        return Math.floor(s/86400)+' hari lalu';
+    }
+
+    function renderComments(){
+        const list=document.getElementById('commentsList');
+        const noC=document.getElementById('noComments');
+        if(comments.length===0){noC.style.display='block';list.innerHTML='';return;}
+        noC.style.display='none';
+        list.innerHTML=comments.map((c,ci)=>`
+            <div class="comment-item" id="comment-${ci}">
+                <div class="comment-header">
+                    <span class="comment-author">👤 ${escHtml(c.name)}</span>
+                    <span class="comment-time">${timeAgo(c.time)}</span>
+                </div>
+                <div class="comment-text">${escHtml(c.text)}</div>
+                ${c.replies&&c.replies.length>0?`<div class="replies">${c.replies.map(r=>`
+                    <div class="comment-item" style="margin-bottom:8px;">
+                        <div class="comment-header">
+                            <span class="comment-author">↩️ ${escHtml(r.name)}</span>
+                            <span class="comment-time">${timeAgo(r.time)}</span>
+                        </div>
+                        <div class="comment-text">${escHtml(r.text)}</div>
+                    </div>`).join('')}</div>`:''}
+                <button class="comment-reply-btn" onclick="toggleReply(${ci})">↩ Balas</button>
+                <div class="reply-input-area" id="reply-area-${ci}">
+                    <input class="reply-name-input" type="text" placeholder="Namamu..." id="rname-${ci}">
+                    <input type="text" placeholder="Tulis balasan..." id="rtext-${ci}" onkeydown="if(event.key==='Enter')submitReply(${ci})">
+                    <button class="reply-submit" onclick="submitReply(${ci})">Kirim</button>
+                </div>
+            </div>`).join('');
+    }
+
+    function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+    function addComment(){
+        const name=document.getElementById('commentName').value.trim();
+        const text=document.getElementById('commentText').value.trim();
+        if(!name||!text){alert('Nama dan komentar tidak boleh kosong!');return;}
+        comments.unshift({name,text,time:Date.now(),replies:[]});
+        document.getElementById('commentName').value='';
+        document.getElementById('commentText').value='';
+        renderComments();
+    }
+
+    function toggleReply(ci){
+        const area=document.getElementById('reply-area-'+ci);
+        area.style.display=area.style.display==='flex'?'none':'flex';
+        if(area.style.display==='flex')document.getElementById('rname-'+ci).focus();
+    }
+
+    function submitReply(ci){
+        const name=document.getElementById('rname-'+ci).value.trim();
+        const text=document.getElementById('rtext-'+ci).value.trim();
+        if(!name||!text){alert('Nama dan balasan tidak boleh kosong!');return;}
+        if(!comments[ci].replies)comments[ci].replies=[];
+        comments[ci].replies.push({name,text,time:Date.now()});
+        renderComments();
+    }
+
+    renderComments();
+</script>
+</body>
+</html>
